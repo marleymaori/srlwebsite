@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#030712] text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SRL — School Rugby League Official Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            srl: {
+              darkest: '#02060f',
+              dark: '#070f1e',
+              card: '#0d1729',
+              border: '#1a2842',
+              gold: '#f59e0b',
+              goldHover: '#d97706',
+              accent: '#38bdf8'
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            display: ['Teko', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .font-display { font-family: 'Teko', sans-serif; letter-spacing: 0.03em; }
+    .sport-card { background-color: #0d1729; border: 1px solid #1a2842; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+    .sport-card-hover:hover { border-color: #f59e0b; transform: translateY(-2px); box-shadow: 0 12px 30px -10px rgba(245, 158, 11, 0.15); }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #02060f; }
+    ::-webkit-scrollbar-thumb { background: #1a2842; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
+  </style>
+</head>
+<body class="h-full flex bg-[#030712] text-slate-100 antialiased font-sans selection:bg-srl-gold selection:text-slate-950">
+
+  <!-- Modern Sidebar Navigation (Desktop NRL Professional Style) -->
+  <aside class="hidden lg:flex flex-col w-72 bg-[#050b16] border-r border-[#1a2842] shrink-0 select-none shadow-2xl">
+    <div class="p-6 flex flex-col items-center justify-center border-b border-[#1a2842] cursor-pointer bg-[#02060f] relative overflow-hidden group" onclick="switchTab('home')">
+      <div class="absolute inset-0 bg-gradient-to-r from-srl-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+      <div class="flex items-center space-x-3 relative z-10">
+        <div class="w-11 h-11 bg-gradient-to-br from-srl-gold to-amber-600 rounded-xl flex items-center justify-center font-display text-3xl font-bold text-slate-950 shadow-lg shadow-amber-500/20">SRL</div>
+        <div class="font-display text-3xl font-bold text-white tracking-wider uppercase leading-none">
+          SRL <span class="text-srl-gold">LEAGUE</span>
+        </div>
+      </div>
+      <div class="text-[10px] text-slate-400 uppercase tracking-widest font-extrabold mt-2 bg-[#0d1729] px-3 py-1 rounded-full border border-[#1a2842] relative z-10 shadow-inner">Official Sports Portal</div>
+    </div>
+    
+    <nav class="flex-1 py-4 px-3 space-y-1.5 font-display uppercase tracking-wider text-base font-semibold overflow-y-auto">
+      <button onclick="switchTab('home')" id="sidebar-home" class="sidebar-btn w-full flex items-center px-4 py-3 rounded-xl text-white bg-[#0d1729] border border-srl-gold/40 shadow-md transition group">
+        <span class="w-8 h-8 rounded-lg bg-srl-gold/10 flex items-center justify-center mr-3 text-srl-gold group-hover:bg-srl-gold group-hover:text-slate-950 transition"><i data-lucide="home" class="w-4 h-4"></i></span>
+        <span>Home</span>
+      </button>
+      <button onclick="switchTab('news')" id="sidebar-news" class="sidebar-btn w-full flex items-center px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-[#0d1729]/60 border border-transparent transition group">
+        <span class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center mr-3 text-slate-400 group-hover:text-srl-gold transition"><i data-lucide="newspaper" class="w-4 h-4"></i></span>
+        <span>News</span>
+      </button>
+      <button onclick="switchTab('matches')" id="sidebar-matches" class="sidebar-btn w-full flex items-center px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-[#0d1729]/60 border border-transparent transition group">
+        <span class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center mr-3 text-slate-400 group-hover:text-srl-gold transition"><i data-lucide="calendar" class="w-4 h-4"></i></span>
+        <span>Fixtures</span>
+      </button>
+      <button onclick="openResultsModal()" id="sidebar-results" class="sidebar-btn w-full flex items-center px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-[#0d1729]/60 border border-transparent transition group">
+        <span class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center mr-3 text-slate-400 group-hover:text-srl-gold transition"><i data-lucide="check-circle-2" class="w-4 h-4"></i></span>
+        <span>Match Results</span>
+      </button>
+      <button onclick="switchTab('ladder')" id="sidebar-ladder" class="sidebar-btn w-full flex items-center px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-[#0d1729]/60 border border-transparent transition group">
+        <span class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center mr-3 text-slate-400 group-hover:text-srl-gold transition"><i data-lucide="list-ordered" class="w-4 h-4"></i></span>
+        <span>Ladder</span>
+      </button>
+      <button onclick="switchTab('teams')" id="sidebar-teams" class="sidebar-btn w-full flex items-center px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-[#0d1729]/60 border border-transparent transition group">
+        <span class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center mr-3 text-slate-400 group-hover:text-srl-gold transition"><i data-lucide="shield" class="w-4 h-4"></i></span>
+        <span>Teams</span>
+      </button>
+      <button onclick="switchTab('stats')" id="sidebar-stats" class="sidebar-btn w-full flex items-center px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-[#0d1729]/60 border border-transparent transition group">
+        <span class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center mr-3 text-slate-400 group-hover:text-srl-gold transition"><i data-lucide="bar-chart-3" class="w-4 h-4"></i></span>
+        <span>Statistics</span>
+      </button>
+      <button onclick="switchTab('reports')" id="sidebar-reports" class="sidebar-btn w-full flex items-center px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-[#0d1729]/60 border border-transparent transition group">
+        <span class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center mr-3 text-slate-400 group-hover:text-srl-gold transition"><i data-lucide="file-text" class="w-4 h-4"></i></span>
+        <span>Match Reports & Ins/Outs</span>
+      </button>
+      <button onclick="switchTab('rules')" id="sidebar-rules" class="sidebar-btn w-full flex items-center px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-[#0d1729]/60 border border-transparent transition group">
+        <span class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center mr-3 text-slate-400 group-hover:text-srl-gold transition"><i data-lucide="book-open" class="w-4 h-4"></i></span>
+        <span>Rules & Protocol</span>
+      </button>
+      <button onclick="switchTab('officials')" id="sidebar-officials" class="sidebar-btn w-full flex items-center px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-[#0d1729]/60 border border-transparent transition group">
+        <span class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center mr-3 text-slate-400 group-hover:text-srl-gold transition"><i data-lucide="award" class="w-4 h-4"></i></span>
+        <span>Officials</span>
+      </button>
+      <button onclick="switchTab('calendar')" id="sidebar-calendar" class="sidebar-btn w-full flex items-center px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-[#0d1729]/60 border border-transparent transition group">
+        <span class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center mr-3 text-slate-400 group-hover:text-srl-gold transition"><i data-lucide="calendar-days" class="w-4 h-4"></i></span>
+        <span>Season Calendar</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="flex-grow flex flex-col min-w-0">
+    
+    <!-- Top Header Bar -->
+    <div class="bg-[#050b16] border-b border-[#1a2842] py-3.5 px-6 hidden md:flex items-center justify-between shadow-sm">
+      <div class="flex items-center space-x-3">
+        <span class="font-display text-2xl font-bold uppercase tracking-wide text-srl-gold" id="header-title">Home</span>
+        <span class="text-slate-600">/</span>
+        <span class="text-xs text-slate-300 font-semibold uppercase tracking-wider bg-[#0d1729] px-3 py-1 rounded-md border border-[#1a2842] shadow-inner">Term 4 2026 Championship Hub</span>
+      </div>
+      <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-2 bg-srl-gold/10 text-srl-gold border border-srl-gold/30 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider font-display shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-srl-gold animate-pulse"></span>
+          <span>Live Competition Active</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Header Bar -->
+    <header class="bg-[#050b16] border-b border-[#1a2842] sticky top-0 z-45 lg:hidden shadow-lg">
+      <div class="px-4 flex items-center justify-between h-16">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
+          <div class="w-10 h-10 bg-gradient-to-br from-srl-gold to-amber-600 rounded-xl flex items-center justify-center font-display text-2xl font-bold text-slate-950 shadow">SRL</div>
+          <span class="font-display text-xl font-bold uppercase text-white tracking-wide">SRL <span class="text-srl-gold">Portal</span></span>
+        </div>
+        <button onclick="toggleMobileMenu()" aria-label="Toggle mobile menu" class="p-2.5 text-slate-300 hover:text-white bg-[#0d1729] rounded-xl border border-[#1a2842] transition">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+      <div id="mobile-menu" class="hidden border-t border-[#1a2842] bg-[#050b16] px-4 py-4 space-y-1.5 font-display uppercase tracking-wider text-sm">
+        <button onclick="switchTab('home'); toggleMobileMenu();" class="block w-full text-left py-2.5 px-3 rounded-lg text-white bg-[#0d1729]">Home</button>
+        <button onclick="switchTab('news'); toggleMobileMenu();" class="block w-full text-left py-2.5 px-3 rounded-lg text-slate-300 hover:bg-[#0d1729]">News</button>
+        <button onclick="switchTab('matches'); toggleMobileMenu();" class="block w-full text-left py-2.5 px-3 rounded-lg text-slate-300 hover:bg-[#0d1729]">Fixtures</button>
+        <button onclick="openResultsModal(); toggleMobileMenu();" class="block w-full text-left py-2.5 px-3 rounded-lg text-slate-300 hover:bg-[#0d1729]">Match Results</button>
+        <button onclick="switchTab('ladder'); toggleMobileMenu();" class="block w-full text-left py-2.5 px-3 rounded-lg text-slate-300 hover:bg-[#0d1729]">Ladder</button>
+        <button onclick="switchTab('teams'); toggleMobileMenu();" class="block w-full text-left py-2.5 px-3 rounded-lg text-slate-300 hover:bg-[#0d1729]">Teams</button>
+        <button onclick="switchTab('stats'); toggleMobileMenu();" class="block w-full text-left py-2.5 px-3 rounded-lg text-slate-300 hover:bg-[#0d1729]">Statistics</button>
+        <button onclick="switchTab('reports'); toggleMobileMenu();" class="block w-full text-left py-2.5 px-3 rounded-lg text-slate-300 hover:bg-[#0d1729]">Match Reports & Ins/Outs</button>
+        <button onclick="switchTab('rules'); toggleMobileMenu();" class="block w-full text-left py-2.5 px-3 rounded-lg text-slate-300 hover:bg-[#0d1729]">Rules & Protocol</button>
+        <button onclick="switchTab('officials'); toggleMobileMenu();" class="block w-full text-left py-2.5 px-3 rounded-lg text-slate-300 hover:bg-[#0d1729]">Officials</button>
+        <button onclick="switchTab('calendar'); toggleMobileMenu();" class="block w-full text-left py-2.5 px-3 rounded-lg text-slate-300 hover:bg-[#0d1729]">Season Calendar</button>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+      <!-- TAB 1: HOME -->
+      <div id="tab-home" class="tab-content space-y-8">
+        <div class="rounded-2xl overflow-hidden bg-gradient-to-r from-[#070f1e] via-[#0d1729] to-[#050b16] border border-[#1a2842] p-6 md:p-10 shadow-2xl relative">
+          <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-srl-gold/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+            <div class="lg:col-span-7 space-y-6">
+              <div class="inline-flex items-center space-x-2 bg-[#02060f]/80 border border-srl-gold/30 px-3.5 py-1.5 rounded-full text-srl-gold text-xs font-bold uppercase tracking-widest font-display shadow-sm">
+                <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                <span>Term 4 2026 Championship</span>
+              </div>
+              <h1 class="font-display text-5xl sm:text-7xl font-bold uppercase text-white tracking-wide leading-none">
+                School Rugby <span class="text-srl-gold">League</span> Portal
+              </h1>
+              <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl font-normal">
+                Welcome to the official SRL Website. Featuring powerhouse contenders <span class="text-srl-gold font-bold">The All Jakes</span> and <span class="text-sky-400 font-bold">The All Marleys</span> in high-stakes weekly battles.
+              </p>
+              <div class="flex flex-wrap gap-4 pt-2">
+                <button onclick="switchTab('news')" class="bg-srl-gold hover:bg-srl-goldHover text-slate-950 font-display uppercase tracking-wider text-lg font-bold px-7 py-3 rounded-xl transition shadow-lg shadow-amber-500/20 flex items-center">
+                  <i data-lucide="newspaper" class="w-5 h-5 mr-2"></i> Read Latest News
+                </button>
+                <button onclick="switchTab('reports')" class="bg-[#050b16] hover:bg-[#1a2842] text-white font-display uppercase tracking-wider text-lg font-bold px-7 py-3 rounded-xl transition border border-[#1a2842] flex items-center shadow-md">
+                  <i data-lucide="users" class="w-5 h-5 mr-2 text-srl-gold"></i> View Team Ins & Outs
+                </button>
+              </div>
+            </div>
+            <div class="lg:col-span-5 sport-card rounded-2xl p-6 shadow-2xl bg-[#070f1e]/90 backdrop-blur-md" id="home-featured-match">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Countdown Timer Banner -->
+        <div class="sport-card rounded-2xl p-6 md:p-8 shadow-2xl border-l-4 border-l-srl-gold relative overflow-hidden bg-gradient-to-r from-[#0d1729] to-[#050b16]" id="countdown-banner">
+          <div class="flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+            <div class="space-y-1 text-center md:text-left">
+              <div class="inline-flex items-center space-x-2 bg-srl-gold/10 border border-srl-gold/30 px-3 py-1 rounded-full text-srl-gold text-xs font-bold uppercase tracking-widest font-display">
+                <span class="w-2 h-2 rounded-full bg-srl-gold animate-pulse"></span>
+                <span id="countdown-round-label">Upcoming: Round 3</span>
+              </div>
+              <h3 class="font-display text-2xl sm:text-3xl font-bold uppercase text-white tracking-wide" id="countdown-teams-label">The All Marleys vs The All Jakes</h3>
+              <p class="text-xs text-slate-400" id="countdown-date-label">Monday, 19 October 2026 | Kickoff: 11:30 AM — Half-time: 11:50 AM — Full-time: 1:25 PM (AEST)</p>
+            </div>
+            <div class="flex items-center gap-3 text-center" id="countdown-timer-boxes">
+              <div class="bg-[#02060f] border border-[#1a2842] px-3.5 py-2.5 rounded-xl min-w-[64px]">
+                <div class="font-display text-3xl font-bold text-srl-gold" id="cd-days">00</div>
+                <div class="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Days</div>
+              </div>
+              <div class="font-display text-2xl text-slate-600 font-bold">:</div>
+              <div class="bg-[#02060f] border border-[#1a2842] px-3.5 py-2.5 rounded-xl min-w-[64px]">
+                <div class="font-display text-3xl font-bold text-srl-gold" id="cd-hours">00</div>
+                <div class="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Hours</div>
+              </div>
+              <div class="font-display text-2xl text-slate-600 font-bold">:</div>
+              <div class="bg-[#02060f] border border-[#1a2842] px-3.5 py-2.5 rounded-xl min-w-[64px]">
+                <div class="font-display text-3xl font-bold text-srl-gold" id="cd-mins">00</div>
+                <div class="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Mins</div>
+              </div>
+              <div class="font-display text-2xl text-slate-600 font-bold">:</div>
+              <div class="bg-[#02060f] border border-[#1a2842] px-3.5 py-2.5 rounded-xl min-w-[64px]">
+                <div class="font-display text-3xl font-bold text-srl-gold" id="cd-secs">00</div>
+                <div class="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Secs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="sport-card rounded-2xl p-6 shadow-xl">
+            <h2 class="font-display text-2xl uppercase font-bold text-white mb-5 flex items-center border-b border-[#1a2842] pb-3.5">
+              <span class="w-8 h-8 rounded-lg bg-srl-gold/10 flex items-center justify-center mr-3 text-srl-gold"><i data-lucide="flame" class="w-4 h-4"></i></span>
+              Top Try Scorers Leaderboard
+            </h2>
+            <div id="home-try-leaders" class="space-y-3.5"></div>
+          </div>
+          <div class="sport-card rounded-2xl p-6 shadow-xl">
+            <h2 class="font-display text-2xl uppercase font-bold text-white mb-5 flex items-center border-b border-[#1a2842] pb-3.5">
+              <span class="w-8 h-8 rounded-lg bg-srl-gold/10 flex items-center justify-center mr-3 text-srl-gold"><i data-lucide="newspaper" class="w-4 h-4"></i></span>
+              Latest Headline News
+            </h2>
+            <div id="home-latest-news" class="space-y-3.5"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: NEWS -->
+      <div id="tab-news" class="tab-content hidden space-y-8">
+        <div class="sport-card p-6 rounded-2xl shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h1 class="font-display text-3xl font-bold uppercase text-white tracking-wide">SRL News & Announcements</h1>
+            <p class="text-slate-400 text-sm mt-1">Latest match reports, disciplinary updates, team news, and competition fixtures.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="filterNews('ALL')" class="news-filter-btn px-4 py-2.5 rounded-xl text-xs font-display uppercase tracking-wider font-bold bg-srl-gold text-slate-950 transition shadow">All News</button>
+            <button onclick="filterNews('Match Report')" class="news-filter-btn px-4 py-2.5 rounded-xl text-xs font-display uppercase tracking-wider font-bold bg-[#050b16] text-slate-300 border border-[#1a2842] transition">Match Reports</button>
+            <button onclick="filterNews('Round 3 Preview')" class="news-filter-btn px-4 py-2.5 rounded-xl text-xs font-display uppercase tracking-wider font-bold bg-[#050b16] text-slate-300 border border-[#1a2842] transition">Round 3 Preview</button>
+            <button onclick="filterNews('Announcement')" class="news-filter-btn px-4 py-2.5 rounded-xl text-xs font-display uppercase tracking-wider font-bold bg-[#050b16] text-slate-300 border border-[#1a2842] transition">Announcements</button>
+          </div>
+        </div>
+        <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </div>
+
+      <!-- TAB 3: MATCHES -->
+      <div id="tab-matches" class="tab-content hidden space-y-8">
+        <div class="sport-card p-6 rounded-2xl shadow-xl">
+          <h1 class="font-display text-3xl font-bold uppercase text-white tracking-wide">Upcoming Match Fixtures</h1>
+          <p class="text-slate-400 text-sm mt-1">Scheduled upcoming rounds, game dates, and venues.</p>
+        </div>
+        <div id="matches-container" class="space-y-6"></div>
+      </div>
+
+      <!-- TAB 4: LADDER -->
+      <div id="tab-ladder" class="tab-content hidden space-y-8">
+        <div class="sport-card p-6 rounded-2xl shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 class="font-display text-3xl font-bold uppercase text-white tracking-wide">Competition Ladder</h1>
+            <p class="text-slate-400 text-sm mt-1">Official SRL standings calculated automatically from match results[cite: 2].</p>
+          </div>
+          <div class="flex items-center space-x-3 bg-[#050b16] border border-[#1a2842] rounded-xl px-4 py-2.5 shadow-inner">
+            <label for="ladder-round-select" class="text-xs font-display uppercase tracking-wider text-slate-300 font-bold">Select Round:</label>
+            <select id="ladder-round-select" onchange="renderLadder()" class="bg-[#0d1729] text-slate-200 text-xs rounded-lg px-3 py-2 font-medium outline-none border border-[#1a2842]">
+            </select>
+          </div>
+        </div>
+        <div class="sport-card rounded-2xl overflow-hidden shadow-2xl">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-[#050b16] text-slate-400 font-display uppercase tracking-wider text-sm border-b border-[#1a2842]">
+                <tr>
+                  <th class="py-4 px-4 text-center">Pos</th>
+                  <th class="py-4 px-4">Team</th>
+                  <th class="py-4 px-3 text-center">P</th>
+                  <th class="py-4 px-3 text-center">W</th>
+                  <th class="py-4 px-3 text-center">D</th>
+                  <th class="py-4 px-3 text-center">L</th>
+                  <th class="py-4 px-3 text-center">PF</th>
+                  <th class="py-4 px-3 text-center">PA</th>
+                  <th class="py-4 px-3 text-center">DIFF</th>
+                  <th class="py-4 px-4 text-center text-srl-gold font-bold text-lg">PTS</th>
+                </tr>
+              </thead>
+              <tbody id="ladder-table-body" class="divide-y divide-[#1a2842]/60 font-medium"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: TEAMS -->
+      <div id="tab-teams" class="tab-content hidden space-y-8">
+        <div class="sport-card p-6 rounded-2xl shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 class="font-display text-3xl font-bold uppercase text-white tracking-wide">SRL Teams & Squad Hub</h1>
+            <p class="text-slate-400 text-sm mt-1">Official team branding, captains, and player rosters.</p>
+          </div>
+          <div class="flex items-center space-x-3 bg-[#050b16] border border-[#1a2842] rounded-xl px-4 py-2.5 shadow-inner">
+            <label for="teams-round-select" class="text-xs font-display uppercase tracking-wider text-slate-300 font-bold">Select Round:</label>
+            <select id="teams-round-select" onchange="renderTeams()" class="bg-[#0d1729] text-slate-200 text-xs rounded-lg px-3 py-2 font-medium outline-none border border-[#1a2842]">
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" id="teams-container"></div>
+      </div>
+
+      <!-- TAB 6: STATISTICS -->
+      <div id="tab-stats" class="tab-content hidden space-y-8">
+        <div class="sport-card p-6 rounded-2xl shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h1 class="font-display text-3xl font-bold uppercase text-white tracking-wide">Player Statistics Leaderboard</h1>
+            <p class="text-slate-400 text-sm mt-1">Overall Top Try Scorers leaderboard updated live from match reports.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <div class="flex items-center space-x-2 bg-[#050b16] border border-[#1a2842] rounded-xl px-4 py-2.5 shadow-inner">
+              <label for="stats-round-select" class="text-xs font-display uppercase tracking-wider text-slate-300 font-bold">Round:</label>
+              <select id="stats-round-select" onchange="renderStats()" class="bg-[#0d1729] text-slate-200 text-xs rounded-lg px-3 py-2 font-medium outline-none border border-[#1a2842]"></select>
+            </div>
+            <select id="stats-team-filter" onchange="renderStats()" class="bg-[#050b16] border border-[#1a2842] text-slate-200 text-xs rounded-xl px-4 py-3 font-semibold">
+              <option value="ALL">All Teams</option>
+              <option value="The All Jakes">The All Jakes</option>
+              <option value="The All Marleys">The All Marleys</option>
+            </select>
+          </div>
+        </div>
+        <div class="sport-card rounded-2xl overflow-hidden shadow-2xl">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-[#050b16] text-slate-400 font-display uppercase tracking-wider text-sm border-b border-[#1a2842]">
+                <tr>
+                  <th class="py-4 px-4 text-center">Rank</th>
+                  <th class="py-4 px-4">Player Name</th>
+                  <th class="py-4 px-4">Team Name</th>
+                  <th class="py-4 px-4 text-center text-srl-gold font-bold text-lg">Total Tries</th>
+                  <th class="py-4 px-4 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="try-scorers-tbody" class="divide-y divide-[#1a2842]/60 font-medium"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 7: MATCH REPORTS & INS/OUTS -->
+      <div id="tab-reports" class="tab-content hidden space-y-8">
+        <div class="sport-card p-6 rounded-2xl shadow-xl border-l-4 border-l-srl-gold">
+          <div class="flex items-center space-x-4">
+            <div class="p-3.5 bg-srl-gold/10 text-srl-gold rounded-xl">
+              <i data-lucide="users" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h1 class="font-display text-3xl font-bold uppercase text-white tracking-wide">Match Reports & Team Ins & Outs</h1>
+              <p class="text-slate-400 text-sm mt-0.5">Detailed match breakdowns with fully visible team changes (**Ins and Outs**), scoring, and disciplinary cards.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Round 3 Confirmed Early Ins and Outs (NRL Professional Layout) -->
+        <div class="sport-card rounded-2xl p-6 sm:p-8 shadow-2xl border-2 border-srl-gold/40 relative overflow-hidden bg-gradient-to-br from-[#0d1729] via-[#070f1e] to-[#050b16]" id="round-3-ins-outs-section">
+          <div class="absolute -right-16 -top-16 w-64 h-64 bg-srl-gold/5 rounded-full blur-2xl pointer-events-none"></div>
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-[#1a2842] pb-5 mb-6 gap-4">
+            <div>
+              <span class="px-3.5 py-1 rounded-full bg-srl-gold text-slate-950 font-display font-bold text-xs uppercase tracking-wider shadow">Confirmed Team Lists</span>
+              <h2 class="font-display text-3xl sm:text-4xl font-bold uppercase text-white tracking-wide mt-2">Round 3 — Team Ins & Outs</h2>
+              <p class="text-xs text-slate-400 mt-1">Date: Monday, 19 October 2026 | Kickoff: 11:30 AM — Half-time: 11:50 AM — 12:55 PM — Full-time: 1:25 PM (Queensland, Australia)</p>
+            </div>
+            <div class="bg-[#050b16] border border-[#1a2842] px-4 py-2.5 rounded-xl text-right">
+              <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-bold font-display">Match Status</span>
+              <span class="text-xs text-srl-gold font-bold uppercase tracking-wider font-display">Ahead of Kickoff (Confirmed)</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- The All Jakes Ins & Outs -->
+            <div class="bg-[#050b16] rounded-2xl p-5 border border-[#1a2842] space-y-4 shadow-xl">
+              <div class="flex justify-between items-center border-b border-[#1a2842] pb-3">
+                <h3 class="font-display text-2xl font-bold uppercase text-white tracking-wide">The All Jakes</h3>
+                <span class="text-xs text-srl-gold font-display font-bold uppercase tracking-wider bg-srl-gold/10 px-3 py-1 rounded-lg border border-srl-gold/30">Squad Updates</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-[#0d1729] p-4 rounded-xl border border-emerald-500/30">
+                  <div class="flex items-center space-x-2 text-emerald-400 font-display uppercase font-bold text-sm tracking-wider mb-2.5">
+                    <i data-lucide="arrow-up-circle" class="w-4 h-4"></i>
+                    <span>Ins (Joining)</span>
+                  </div>
+                  <ul class="text-xs text-slate-200 space-y-2">
+                    <li class="flex items-center space-x-2 bg-[#050b16] p-2.5 rounded-lg border border-[#1a2842]">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                      <strong class="text-white">Angus Bevan</strong>
+                    </li>
+                  </ul>
+                </div>
+                <div class="bg-[#0d1729] p-4 rounded-xl border border-rose-500/30">
+                  <div class="flex items-center space-x-2 text-rose-400 font-display uppercase font-bold text-sm tracking-wider mb-2.5">
+                    <i data-lucide="arrow-down-circle" class="w-4 h-4"></i>
+                    <span>Outs (Leaving)</span>
+                  </div>
+                  <ul class="text-xs text-slate-200 space-y-2">
+                    <li class="flex items-center space-x-2 bg-[#050b16] p-2.5 rounded-lg border border-[#1a2842]">
+                      <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+                      <strong class="text-white">Patrick</strong>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- The All Marleys Ins & Outs -->
+            <div class="bg-[#050b16] rounded-2xl p-5 border border-[#1a2842] space-y-4 shadow-xl">
+              <div class="flex justify-between items-center border-b border-[#1a2842] pb-3">
+                <h3 class="font-display text-2xl font-bold uppercase text-white tracking-wide">The All Marleys</h3>
+                <span class="text-xs text-sky-400 font-display font-bold uppercase tracking-wider bg-sky-400/10 px-3 py-1 rounded-lg border border-sky-400/30">Squad Updates</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-[#0d1729] p-4 rounded-xl border border-emerald-500/30">
+                  <div class="flex items-center space-x-2 text-emerald-400 font-display uppercase font-bold text-sm tracking-wider mb-2.5">
+                    <i data-lucide="arrow-up-circle" class="w-4 h-4"></i>
+                    <span>Ins (Joining)</span>
+                  </div>
+                  <ul class="text-xs text-slate-200 space-y-2">
+                    <li class="flex items-center space-x-2 bg-[#050b16] p-2.5 rounded-lg border border-[#1a2842]">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                      <strong class="text-white">Kobe Fenwick</strong>
+                    </li>
+                  </ul>
+                </div>
+                <div class="bg-[#0d1729] p-4 rounded-xl border border-rose-500/30">
+                  <div class="flex items-center space-x-2 text-rose-400 font-display uppercase font-bold text-sm tracking-wider mb-2.5">
+                    <i data-lucide="arrow-down-circle" class="w-4 h-4"></i>
+                    <span>Outs (Leaving)</span>
+                  </div>
+                  <ul class="text-xs text-slate-200 space-y-2">
+                    <li class="flex items-center space-x-2 bg-[#050b16] p-2.5 rounded-lg border border-[#1a2842]">
+                      <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+                      <strong class="text-white">Lennox Weeding</strong>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="reports-nav-tabs" class="flex flex-wrap gap-3 border-b border-[#1a2842] pb-4"></div>
+        <div id="match-reports-container" class="space-y-8"></div>
+      </div>
+
+      <!-- TAB 8: RULES & PROTOCOL -->
+      <div id="tab-rules" class="tab-content hidden space-y-8">
+        <div class="sport-card p-6 rounded-2xl shadow-xl space-y-2">
+          <h1 class="font-display text-3xl font-bold uppercase text-white tracking-wide">SRL Touch Rugby Rules & Protocols</h1>
+          <p class="text-slate-400 text-sm">Official regulations, gameplay limitations, and referee post-match review standards.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="sport-card p-6 rounded-2xl shadow-xl space-y-4">
+            <h2 class="font-display text-xl font-bold uppercase text-srl-gold border-b border-[#1a2842] pb-3 flex items-center">
+              <i data-lucide="shield-check" class="w-5 h-5 mr-2.5"></i> Core Gameplay Rules
+            </h2>
+            <ul class="space-y-3.5 text-xs text-slate-300">
+              <li class="flex items-start space-x-2.5">
+                <i data-lucide="check-circle" class="w-4 h-4 text-srl-gold shrink-0 mt-0.5"></i>
+                <span><strong>No Tackling:</strong> Full contact or tackling is strictly prohibited. Possession changes are governed by a 2-hand touch rule on the ball carrier.</span>
+              </li>
+              <li class="flex items-start space-x-2.5">
+                <i data-lucide="check-circle" class="w-4 h-4 text-srl-gold shrink-0 mt-0.5"></i>
+                <span><strong>6 Tackles Only:</strong> Each team is allocated a maximum of 6 touches (tackles) to advance the ball and score before a turnover on the 6th touch.</span>
+              </li>
+            </ul>
+          </div>
+          <div class="sport-card p-6 rounded-2xl shadow-xl space-y-4">
+            <h2 class="font-display text-xl font-bold uppercase text-srl-gold border-b border-[#1a2842] pb-3 flex items-center">
+              <i data-lucide="gavel" class="w-5 h-5 mr-2.5"></i> Referee Review & Whistle Protocol
+            </h2>
+            <ul class="space-y-3.5 text-xs text-slate-300">
+              <li class="flex items-start space-x-2.5">
+                <i data-lucide="shield-alert" class="w-4 h-4 text-amber-500 shrink-0 mt-0.5"></i>
+                <span><strong>Final Whistle Stages:</strong> Once the final whistle blows, the game is officially marked as either half-time or full-time depending on the match stage.</span>
+              </li>
+              <li class="flex items-start space-x-2.5">
+                <i data-lucide="shield-alert" class="w-4 h-4 text-amber-500 shrink-0 mt-0.5"></i>
+                <span><strong>Post-Match Review:</strong> After full-time, referees review the entire game to check for rule violations, fair play, and invalid tries.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 9: OFFICIALS -->
+      <div id="tab-officials" class="tab-content hidden space-y-8">
+        <div class="sport-card p-6 rounded-2xl shadow-xl">
+          <h1 class="font-display text-3xl font-bold uppercase text-white tracking-wide">Competition Officials</h1>
+          <p class="text-slate-400 text-sm mt-1">Official referees managing SRL matches.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="sport-card rounded-2xl p-6 flex items-center space-x-5 shadow-xl">
+            <div class="w-16 h-16 rounded-2xl bg-[#050b16] border border-[#1a2842] flex items-center justify-center text-srl-gold font-display text-3xl font-bold shadow-md">M</div>
+            <div>
+              <h2 class="font-display text-2xl font-bold uppercase text-white tracking-wide">Marley</h2>
+              <p class="text-srl-gold text-xs mt-0.5 font-bold uppercase tracking-wider font-display">SRL Official Referee</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 10: SEASON CALENDAR -->
+      <div id="tab-calendar" class="tab-content hidden space-y-8">
+        <div class="sport-card p-6 rounded-2xl shadow-xl">
+          <h1 class="font-display text-3xl font-bold uppercase text-white tracking-wide">Season Calendar & Fixtures[cite: 2]</h1>
+          <p class="text-slate-400 text-sm mt-1">Term 4 2026 schedule, weekly rounds, and Grand Final event.</p>
+        </div>
+        <div id="calendar-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MATCH RESULTS MODAL -->
+  <div id="results-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="sport-card rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-[#1a2842] overflow-hidden relative">
+      <div class="p-6 bg-[#050b16] border-b border-[#1a2842] flex items-center justify-between shrink-0">
+        <div>
+          <h2 class="font-display text-2xl font-bold uppercase text-white tracking-wide">Match Results Hub[cite: 2]</h2>
+          <p class="text-slate-400 text-xs mt-0.5">Official final scores and outcomes from completed SRL matches.</p>
+        </div>
+        <button onclick="closeResultsModal()" aria-label="Close match results modal" class="text-slate-400 hover:text-white bg-[#0d1729] p-2.5 rounded-xl transition-colors border border-[#1a2842]">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="results-modal-content" class="p-6 space-y-6 overflow-y-auto flex-1 min-h-0"></div>
+      <div class="shrink-0 p-4 bg-[#050b16] border-t border-[#1a2842] flex justify-center">
+        <button onclick="closeResultsModal()" class="flex items-center gap-2 text-slate-950 bg-srl-gold hover:bg-srl-goldHover px-6 py-2.5 rounded-xl shadow-lg transition-colors text-xs font-display uppercase font-bold tracking-wider">
+          <i data-lucide="x" class="w-4 h-4"></i>
+          <span>Close Results</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATCH REPORT MODAL -->
+  <div id="match-report-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="sport-card rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-[#1a2842] overflow-hidden relative">
+      <div class="p-6 bg-[#050b16] border-b border-[#1a2842] flex items-center justify-between shrink-0">
+        <div>
+          <h2 class="font-display text-2xl font-bold uppercase text-white tracking-wide">Match Report & Team Ins & Outs</h2>
+          <p class="text-slate-400 text-xs mt-0.5">Full match breakdown, score progression, squad changes, and disciplinary notes.</p>
+        </div>
+        <button onclick="closeMatchReportModal()" aria-label="Close match report modal" class="text-slate-400 hover:text-white bg-[#0d1729] p-2.5 rounded-xl transition-colors border border-[#1a2842]">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="match-report-modal-content" class="p-6 space-y-6 overflow-y-auto flex-1 min-h-0"></div>
+      <div class="shrink-0 p-4 bg-[#050b16] border-t border-[#1a2842] flex justify-center">
+        <button onclick="closeMatchReportModal()" class="flex items-center gap-2 text-slate-950 bg-srl-gold hover:bg-srl-goldHover px-6 py-2.5 rounded-xl shadow-lg transition-colors text-xs font-display uppercase font-bold tracking-wider">
+          <i data-lucide="x" class="w-4 h-4"></i>
+          <span>Close Report</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAYER MODAL -->
+  <div id="player-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="sport-card rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-6 border border-[#1a2842]">
+      <button onclick="closePlayerModal()" aria-label="Close player profile modal" class="absolute top-4 right-4 text-slate-400 hover:text-white bg-[#0d1729] p-2.5 rounded-xl border border-[#1a2842]">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div id="player-modal-content"></div>
+    </div>
+  </div>
+
+  <!-- ARTICLE MODAL -->
+  <div id="article-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="sport-card rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-[#1a2842] overflow-hidden">
+      <div id="article-modal-content" class="p-6 md:p-8 space-y-6 text-slate-300 overflow-y-auto flex-1 min-h-0"></div>
+      <div class="shrink-0 p-4 bg-[#050b16] border-t border-[#1a2842] flex justify-center">
+        <button onclick="closeArticleModal()" aria-label="Close article modal" class="flex items-center gap-2 text-slate-950 bg-srl-gold hover:bg-srl-goldHover px-6 py-2.5 rounded-xl shadow-lg transition-colors text-xs font-display uppercase font-bold tracking-wider">
+          <i data-lucide="x" class="w-4 h-4"></i>
+          <span>Close Article</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let SRL_DATA = {
+      season: "Term 4, 2026",
+      teams: [
+        {
+          id: "jakes",
+          name: "The All Jakes",
+          captain: "Jake Upton",
+          location: "Oval 2 (Next To Grandstand)",
+          colorTheme: "border-[#1a2842] text-srl-gold bg-[#050b16]",
+          squad: ["Jake Upton", "Ethan Ringui", "Adam Khalil", "Tyler Gray", "Angus Bevan", "Patrick"]
+        },
+        {
+          id: "marleys",
+          name: "The All Marleys",
+          captain: "Marley",
+          location: "Oval 2 (Next to Roadway)",
+          colorTheme: "border-[#1a2842] text-sky-400 bg-[#050b16]",
+          squad: ["Marley Beckett", "Raum Wright", "Daniel Tavete", "Ethan Peach", "Lennox Weeding", "Kobe Fenwick"]
+        }
+      ],
+      news: [
+        {
+          id: "news-2",
+          title: "Round 3 Match Report: High-Stakes Clash and Squad Shuffles",
+          date: "19 October 2026",
+          author: "SRL Sports Desk",
+          category: "Match Report",
+          image: "Designer.png",
+          summary: "A comprehensive breakdown of Round 3, highlighting the latest tactical changes, standout performances, and confirmed team ins and outs.",
+          content: `
+            <p class="leading-relaxed">Round 3 of the School Rugby League championship delivered another high-octane chapter in the ongoing rivalry between the All Jakes and the All Marleys.</p>
+
+            <h3 class="font-display text-xl font-bold text-srl-gold pt-4 border-t border-[#1a2842]">Match Overview & Tactics</h3>
+            <p class="leading-relaxed">Both sides entered the fixture with freshly adjusted line-ups following disciplinary reviews and squad rotations from previous weeks. The early exchanges saw both teams trading possession under intense pressure.</p>
+
+            <h3 class="font-display text-xl font-bold text-srl-gold pt-4 border-t border-[#1a2842]">Squad Ins & Outs Impact</h3>
+            <p class="leading-relaxed">The strategic changes announced ahead of kickoff played a crucial role in how both teams structured their attack and defense:</p>
+            <ul class="list-disc list-inside space-y-2 text-sm text-slate-300">
+              <li><strong>The All Jakes:</strong> Welcomed back fresh legs with Kobe Fenwick joining the squad, while managing the absence of Patrick following disciplinary measures.</li>
+              <li><strong>The All Marleys:</strong> Brought in Angus Bevan to bolster the lineup, while Lennox Weeding rotated out of the matchday squad.</li>
+            </ul>
+
+            <h3 class="font-display text-xl font-bold text-srl-gold pt-4 border-t border-[#1a2842]">Looking Ahead</h3>
+            <p class="leading-relaxed">As the competition heads deeper into Term 4, the battle for ladder supremacy and individual try-scoring honors between Jake and Marley continues to heat up. Every possession counts as the teams prepare for the next round of fixtures.</p>
+          `
+        },
+        {
+  id: "news-1",
+  title: "TRANSFER NEWS: Kobe Fenwick Signs with The All Marleys",
+  date: "21 October 2026",
+  author: "SRL Sports Desk",
+  category: "Transfer News",
+  image: "allmarleys.png",
+  summary: "The All Marleys have secured a major signing, with Kobe Fenwick officially switching from The All Jakes to join Marley’s squad ahead of the next round of SRL action.",
+  content: `
+    <p class="leading-relaxed"><strong>TRANSFER CONFIRMED:</strong> The All Marleys have officially signed Kobe Fenwick from rivals The All Jakes in a significant move ahead of the next round of the School Rugby League (SRL) competition.</p>
+
+    <p class="leading-relaxed">Fenwick's switch sees him leave Jake Upton's side to join Marley and The All Marleys, adding a new name to the squad as the competition continues to heat up. The signing brings fresh attention to the rivalry between the two teams, with Fenwick now set to represent the side he previously competed against.</p>
+
+    <h3 class="font-display text-xl font-bold text-srl-gold pt-4 border-t border-[#1a2842]">A New Chapter</h3>
+
+    <p class="leading-relaxed">The move marks a new chapter for Fenwick, who will now wear the colours of The All Marleys. With both teams continuing to battle for competition supremacy, his transfer could add another layer of intrigue to future clashes between the rivals.</p>
+
+    <p class="leading-relaxed">Captain Marley will welcome Fenwick into the squad as The All Marleys look to strengthen their lineup and build momentum heading into the upcoming rounds. All eyes will be on Fenwick as he prepares to face his former teammates from The All Jakes in future encounters.</p>
+
+    <h3 class="font-display text-xl font-bold text-srl-gold pt-4 border-t border-[#1a2842]">The Transfer at a Glance</h3>
+
+    <ul class="list-disc list-inside space-y-2 text-sm text-slate-300">
+      <li><strong>Player:</strong> Kobe Fenwick</li>
+      <li><strong>Previous team:</strong> The All Jakes</li>
+      <li><strong>New team:</strong> The All Marleys</li>
+      <li><strong>Transfer status:</strong> Confirmed</li>
+      <li><strong>New captain:</strong> Marley</li>
+    </ul>
+
+    <p class="leading-relaxed">One team loses a player, another gains a signing. With Kobe Fenwick now officially an All Marley, the SRL rivalry has a new storyline to follow.</p>
+  `
+},
+
+      ],
+      matches: [
+        {
+          id: "R1",
+          round: "Round 1 (Week 2)",
+          date: "14 October 2026",
+          status: "Completed",
+          homeTeam: "The All Jakes",
+          awayTeam: "The All Marleys",
+          homeScore: 28,
+          awayScore: 20,
+          halfTimeHome: 16,
+          halfTimeAway: 12,
+          referees: ["Marley"],
+          tries: {
+            "Jake Upton": 3,
+            "Ethan Ringui": 1,
+            "Tyler Gray": 1,
+            "Adam Khalil": 1,
+            "Marley Beckett": 4,
+            "Daniel Tavete": 1
+          },
+          noTries: ["Jake Upton", "Marley Beckett", "Ethan Ringui (Punishment: No try excluded from official stats)"],
+          playersOnReport: [
+            "Jake Upton — Pushing", 
+            "Raum Wright — Kicking while a player was on the ground", 
+            "Daniel Tavete — Starting a fight", 
+            "Ethan Ringui — Starting a fight and cheating"
+          ],
+          sinBins: ["Raum Wright — 2 minutes for kicking"],
+          sendOffs: ["None"],
+          teamChanges: {
+            ins: ["Angus Bevan"],
+            outs: ["Lennox Weeding", "Esjay"]
+          }
+        },
+        {
+          id: "R2",
+          round: "Round 2 (Week 2)",
+          date: "16 October 2026",
+          status: "Completed",
+          homeTeam: "The All Jakes",
+          awayTeam: "The All Marleys",
+          homeScore: 38,
+          awayScore: 42,
+          halfTimeHome: 16,
+          halfTimeAway: 16,
+          referees: ["Marley Beckett"],
+          tries: {
+            "Jake Upton": 6,
+            "Ethan Ringui": 2,
+            "Adam Khalil": 1,
+            "Marley Beckett": 7,
+            "Daniel Tavete": 3
+          },
+          noTries: ["Jake Upton - Touch before try (Offsited)"],
+          playersOnReport: ["Patrick — Pulling Tavetes Shirt perventing a try"],
+          sinBins: ["Patrick — 2 minutes"],
+          sendOffs: ["None"],
+          teamChanges: {
+            ins: ["Kobe Fenwick", "Ethan Peach", "Patrick"],
+            outs: ["Lennox Weeding", "Esjay | Dropped", "Tyler Gray", "Angus Bevan"]
+          }
+        },
+        {
+          id: "R3",
+          round: "Round 3 (Week 4)",
+          date: "28 October 2026",
+          status: "Completed",
+          homeTeam: "The All Marleys",
+          awayTeam: "The All Jakes",
+          homeScore: 24,
+          awayScore: 20,
+          halfTimeHome: 8,
+          halfTimeAway: 8,
+          referees: ["Marley Beckett"],
+          tries: {
+            "Marley Beckett": 3,
+            "Ethan Ringui": 1,
+            "Kobe Fenwick": 1,
+            "Tyler Gray": 3,
+            "Daniel Tavete": 1,
+            "Raum Wright": 1,
+            "Adam Khaili": 1,
+          },
+          noTries: ["None"],
+          playersOnReport: ["Angus - Swearing at Ref"],
+          sinBins: ["None"],
+          sendOffs: ["None"],
+          teamChanges: {
+            ins: ["Kobe Fenwick"],
+            outs: ["Lennox Weeding"]
+          }
+        },
+        { 
+          id: "R4", 
+          round: "Round 4", 
+          date: "Friday, 30 October 2026", 
+          kickoff: "11:10 AM",
+          finish: "1:30 PM",
+          datetime: "2026-10-28T11:10:00",
+          status: "Upcoming", 
+          homeTeam: "The All Jakes", 
+          awayTeam: "The All Marleys", 
+          homeScore: 0, 
+          awayScore: 0, 
+          tries: {}, 
+          teamChanges: { 
+            ins: ["TBD"], 
+            outs: ["TBD"] 
+          } 
+        },
+        { id: "R5", round: "Round 5 (Week 4)", date: "Thursday, 29 October 2026", status: "Upcoming", homeTeam: "The All Marleys", awayTeam: "The All Jakes", homeScore: 0, awayScore: 0, tries: {}, teamChanges: { ins: ["TBD"], outs: ["TBD"] } },
+        { id: "R6", round: "Round 6 (Week 4)", date: "Friday, 30 October 2026", status: "Upcoming", homeTeam: "The All Jakes", awayTeam: "The All Marleys", homeScore: 0, awayScore: 0, tries: {}, teamChanges: { ins: ["TBD"], outs: ["TBD"] } },
+        { id: "R7", round: "Round 7 (Week 6)", date: "Wednesday, 11 November 2026", status: "Upcoming", homeTeam: "The All Marleys", awayTeam: "The All Jakes", homeScore: 0, awayScore: 0, tries: {}, teamChanges: { ins: ["TBD"], outs: ["TBD"] } },
+        { id: "R8", round: "Round 8 (Week 6)", date: "Thursday, 12 November 2026", status: "Upcoming", homeTeam: "The All Marleys", awayTeam: "The All Jakes", homeScore: 0, awayScore: 0, tries: {}, teamChanges: { ins: ["TBD"], outs: ["TBD"] } },
+        { id: "R9", round: "Round 9 (Week 6)", date: "Friday, 13 November 2026", status: "Upcoming", homeTeam: "The All Marleys", awayTeam: "The All Jakes", homeScore: 0, awayScore: 0, tries: {}, teamChanges: { ins: ["TBD"], outs: ["TBD"] } },
+        { id: "GF", round: "Grand Final", date: "9th December 2026 (Week 10)", status: "Upcoming", homeTeam: "The All Jakes", awayTeam: "The All Marleys", homeScore: 0, awayScore: 0, tries: {}, teamChanges: { ins: ["TBD"], outs: ["TBD"] } }
+      ]
+    };
+
+    // Live Countdown Timer Function (Queensland Local Time)
+    function updateCountdown() {
+      const now = new Date();
+      // Target matches in sequence starting from Round 3
+      let targetMatch = SRL_DATA.matches.find(m => m.id === 'R4');
+      
+      const r4Time = new Date("2026-10-30T11:10:00");
+      const r5Time = new Date("2026-11-3T11:10:00")
+
+      let roundLabelText = "Upcoming: Round 4";
+      let teamsLabelText = "The All Marleys vs The All Jakes";
+      let dateLabelText = "Firday, 30 October 2026 | Kickoff: 11:30 AM — Half-time: 11:50 AM — 12:55 PM — Full-time: 1:25 PM (AEST)";
+      let targetTime = r4Time;
+
+      if (now >= r4Time) {
+        targetMatch = SRL_DATA.matches.find(m => m.id === 'R4');
+        roundLabelText = "Upcoming: Round 4";
+        teamsLabelText = "The All Jakes vs The All Marleys";
+        dateLabelText = "Wednesday, 28 October 2026 | Kickoff: 11:10 AM — Finish: 1:30 PM (AEST)";
+        targetTime = r4Time;
+      }
+
+      const diff = targetTime - now;
+
+      if (diff <= 0) {
+        document.getElementById('countdown-round-label').innerText = roundLabelText;
+        document.getElementById('countdown-teams-label').innerText = teamsLabelText;
+        document.getElementById('countdown-date-label').innerText = dateLabelText;
+        document.getElementById('cd-days').innerText = "00";
+        document.getElementById('cd-hours').innerText = "00";
+        document.getElementById('cd-mins').innerText = "00";
+        document.getElementById('cd-secs').innerText = "00";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById('countdown-round-label').innerText = roundLabelText;
+      document.getElementById('countdown-teams-label').innerText = teamsLabelText;
+      document.getElementById('countdown-date-label').innerText = dateLabelText;
+      document.getElementById('cd-days').innerText = String(days).padStart(2, '0');
+      document.getElementById('cd-hours').innerText = String(hours).padStart(2, '0');
+      document.getElementById('cd-mins').innerText = String(mins).padStart(2, '0');
+      document.getElementById('cd-secs').innerText = String(secs).padStart(2, '0');
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.sidebar-btn').forEach(btn => {
+        btn.classList.remove('text-white', 'bg-[#0d1729]', 'border-srl-gold/40', 'shadow-md');
+        btn.classList.add('text-slate-400', 'border-transparent');
+        const iconContainer = btn.querySelector('span');
+        if (iconContainer) {
+          iconContainer.classList.remove('bg-srl-gold', 'text-slate-950');
+          iconContainer.classList.add('bg-slate-900', 'text-slate-400');
+        }
+      });
+
+      const activeTab = document.getElementById(`tab-${tabId}`);
+      if (activeTab) activeTab.classList.remove('hidden');
+
+      const activeSidebar = document.getElementById(`sidebar-${tabId}`);
+      if (activeSidebar) {
+        activeSidebar.classList.add('text-white', 'bg-[#0d1729]', 'border-srl-gold/40', 'shadow-md');
+        activeSidebar.classList.remove('text-slate-400', 'border-transparent');
+        const iconContainer = activeSidebar.querySelector('span');
+        if (iconContainer) {
+          iconContainer.classList.add('bg-srl-gold', 'text-slate-950');
+          iconContainer.classList.remove('bg-slate-900', 'text-slate-400');
+        }
+      }
+
+      const titles = { 
+        home: 'Home', 
+        news: 'News Hub', 
+        matches: 'Fixtures', 
+        ladder: 'Ladder', 
+        teams: 'Teams', 
+        stats: 'Statistics', 
+        reports: 'Match Reports & Ins/Outs', 
+        rules: 'Rules & Protocol', 
+        officials: 'Officials', 
+        calendar: 'Season Calendar' 
+      };
+      document.getElementById('header-title').innerText = titles[tabId] || 'Portal';
+      
+      if (tabId === 'ladder') initRoundSelect('ladder-round-select');
+      if (tabId === 'teams') initRoundSelect('teams-round-select');
+      if (tabId === 'stats') initRoundSelect('stats-round-select');
+      if (tabId === 'news') renderNews('ALL');
+      if (tabId === 'matches') renderMatches();
+      if (tabId === 'reports') renderMatchReports();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    }
+
+    function openResultsModal() {
+      renderResultsModalContent();
+      document.getElementById('results-modal').classList.remove('hidden');
+    }
+
+    function closeResultsModal() {
+      document.getElementById('results-modal').classList.add('hidden');
+    }
+
+    function openMatchReportModal(matchId) {
+      renderMatchReportModalContent(matchId);
+      document.getElementById('match-report-modal').classList.remove('hidden');
+    }
+
+    function closeMatchReportModal() {
+      document.getElementById('match-report-modal').classList.add('hidden');
+    }
+
+    function renderResultsModalContent() {
+      const completed = SRL_DATA.matches.filter(m => m.status === 'Completed');
+      document.getElementById('results-modal-content').innerHTML = completed.length > 0 ? completed.map(m => `
+        <div class="bg-[#050b16] rounded-2xl p-5 space-y-4 border border-[#1a2842] shadow-md">
+          <div class="flex justify-between items-center text-xs font-display uppercase font-semibold text-slate-400 tracking-wider">
+            <span>${m.round}</span>
+            <span class="px-3 py-1 rounded-full bg-[#0d1729] border border-[#1a2842] text-srl-gold font-bold">${m.status}</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center text-center">
+            <div class="md:col-span-5 md:text-right font-display text-2xl font-bold uppercase text-white">${m.homeTeam}</div>
+            <div class="md:col-span-2 font-display text-3xl font-black text-srl-gold">${m.homeScore} – ${m.awayScore}</div>
+            <div class="md:col-span-5 md:text-left font-display text-2xl font-bold uppercase text-white">${m.awayTeam}</div>
+          </div>
+          <div class="text-xs text-slate-400 text-center pt-3 border-t border-[#1a2842] flex flex-wrap justify-between items-center gap-3">
+            <span>Date: ${m.date}</span>
+            <button onclick="closeResultsModal(); openMatchReportModal('${m.id}');" class="bg-srl-gold hover:bg-srl-goldHover text-slate-950 font-display font-bold text-xs uppercase px-4 py-2 rounded-xl transition shadow">
+              View Full Match Report & Ins/Outs
+            </button>
+          </div>
+        </div>
+      `).join('') : '<div class="p-6 text-center text-slate-400">No completed match results available yet.</div>';
+      lucide.createIcons();
+    }
+
+    function renderMatchReportModalContent(matchId) {
+      const match = SRL_DATA.matches.find(m => m.id === matchId);
+      if (!match) return;
+
+      const ins = match.teamChanges && match.teamChanges.ins ? match.teamChanges.ins : ["None"];
+      const outs = match.teamChanges && match.teamChanges.outs ? match.teamChanges.outs : ["None"];
+
+      document.getElementById('match-report-modal-content').innerHTML = `
+        <div class="space-y-6">
+          <div class="border-b border-[#1a2842] pb-4">
+            <span class="bg-srl-gold text-slate-950 font-display font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">${match.round} Official Report</span>
+            <h2 class="font-display text-3xl font-bold uppercase text-white mt-2">${match.homeTeam} ${match.homeScore} – ${match.awayScore} ${match.awayTeam}</h2>
+            <p class="text-xs text-slate-400 mt-1">Date: ${match.date} | Referees: ${match.referees ? match.referees.join(', ') : 'TBD'}</p>
+          </div>
+
+          <div class="bg-[#050b16] p-5 rounded-2xl border border-srl-gold/40 shadow-xl space-y-4">
+            <div class="flex items-center space-x-2 text-srl-gold font-display font-bold uppercase text-base tracking-wider border-b border-[#1a2842] pb-2.5">
+              <i data-lucide="repeat" class="w-4 h-4"></i>
+              <span>Team Lineup Changes (Ins & Outs)</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-[#0d1729] p-4 rounded-xl border border-emerald-500/30">
+                <div class="flex items-center space-x-2 text-emerald-400 font-display uppercase font-bold text-sm tracking-wider mb-2">
+                  <i data-lucide="arrow-up-circle" class="w-4 h-4"></i>
+                  <span>Team Ins (New / Returning)</span>
+                </div>
+                <ul class="text-xs text-slate-200 list-disc list-inside space-y-1">
+                  ${ins.map(i => `<li>${i}</li>`).join('')}
+                </ul>
+              </div>
+              <div class="bg-[#0d1729] p-4 rounded-xl border border-rose-500/30">
+                <div class="flex items-center space-x-2 text-rose-400 font-display uppercase font-bold text-sm tracking-wider mb-2">
+                  <i data-lucide="arrow-down-circle" class="w-4 h-4"></i>
+                  <span>Team Outs (Unavailable / Dropped)</span>
+                </div>
+                <ul class="text-xs text-slate-200 list-disc list-inside space-y-1">
+                  ${outs.map(o => `<li>${o}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-[#050b16] p-4.5 rounded-2xl border border-[#1a2842] space-y-2">
+              <h3 class="font-display text-base font-bold uppercase text-srl-gold tracking-wider">Score Progression</h3>
+              <div class="text-xs text-slate-300 flex justify-between py-1.5 border-b border-[#1a2842]"><span>Half-time Score:</span> <strong class="text-white">${match.homeTeam} ${match.halfTimeHome || 0} – ${match.halfTimeAway || 0} ${match.awayTeam}</strong></div>
+              <div class="text-xs text-slate-300 flex justify-between py-1.5"><span>Full-time Score:</span> <strong class="text-srl-gold">${match.homeTeam} ${match.homeScore} – ${match.awayScore} ${match.awayTeam}</strong></div>
+            </div>
+
+            <div class="bg-[#050b16] p-4.5 rounded-2xl border border-[#1a2842] space-y-2">
+              <h3 class="font-display text-base font-bold uppercase text-srl-gold tracking-wider">Try Scorers</h3>
+              <div class="text-xs text-slate-300 space-y-1.5">
+                ${match.tries ? Object.entries(match.tries).map(([player, tries]) => tries > 0 ? `<div class="flex justify-between py-0.5 border-b border-[#1a2842]/40"><span>${player}:</span> <strong class="text-srl-gold">${tries} try(ies)</strong></div>` : '').join('') : 'None'}
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-[#050b16] p-4.5 rounded-2xl border border-[#1a2842]">
+              <h4 class="font-display text-sm font-bold uppercase text-srl-gold tracking-wider mb-2">No-Tries</h4>
+              <ul class="text-xs text-slate-300 list-disc list-inside space-y-1">${match.noTries && match.noTries.length > 0 ? match.noTries.map(n => `<li>${n}</li>`).join('') : '<li>None</li>'}</ul>
+            </div>
+            <div class="bg-[#050b16] p-4.5 rounded-2xl border border-[#1a2842]">
+              <h4 class="font-display text-sm font-bold uppercase text-rose-400 tracking-wider mb-2">Players On Report</h4>
+              <ul class="text-xs text-slate-300 list-disc list-inside space-y-1">${match.playersOnReport && match.playersOnReport.length > 0 ? match.playersOnReport.map(r => `<li>${r}</li>`).join('') : '<li>None</li>'}</ul>
+            </div>
+            <div class="bg-[#050b16] p-4.5 rounded-2xl border border-[#1a2842]">
+              <h4 class="font-display text-sm font-bold uppercase text-amber-400 tracking-wider mb-2">Sin Bins & Cards</h4>
+              <ul class="text-xs text-slate-300 list-disc list-inside space-y-1">${match.sinBins && match.sinBins.length > 0 ? match.sinBins.map(s => `<li>${s}</li>`).join('') : '<li>None</li>'}</ul>
+            </div>
+          </div>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function initRoundSelect(selectId) {
+      const selectEl = document.getElementById(selectId);
+      if (!selectEl) return;
+      const currentVal = selectEl.value;
+      selectEl.innerHTML = SRL_DATA.matches.map((m, idx) => `
+        <option value="${idx}">${m.round}</option>
+      `).join('');
+      if (currentVal !== "" && selectEl.querySelector(`option[value="${currentVal}"]`)) {
+        selectEl.value = currentVal;
+      } else {
+        selectEl.value = SRL_DATA.matches.length - 1;
+      }
+    }
+
+    function calculatePlayerStats(upToIndex = SRL_DATA.matches.length - 1) {
+      const playerMap = {};
+      SRL_DATA.teams.forEach(team => {
+        team.squad.forEach(player => {
+          playerMap[player] = { name: player, team: team.name, totalTries: 0, matchesPlayed: 0 };
+        });
+      });
+
+      for (let i = 0; i <= upToIndex; i++) {
+        const match = SRL_DATA.matches[i];
+        if (match.status === 'Completed' && match.tries) {
+          Object.entries(match.tries).forEach(([player, tries]) => {
+            if (playerMap[player]) {
+              playerMap[player].totalTries += tries;
+              playerMap[player].matchesPlayed += 1;
+            }
+          });
+        }
+      }
+
+      const sorted = Object.values(playerMap).sort((a, b) => b.totalTries - a.totalTries || a.name.localeCompare(b.name));
+      let currentRank = 1;
+      sorted.forEach((p, idx) => {
+        if (idx > 0 && p.totalTries < sorted[idx - 1].totalTries) currentRank = idx + 1;
+        p.rank = currentRank;
+      });
+      return sorted;
+    }
+
+    function calculateLadder(upToIndex = SRL_DATA.matches.length - 1) {
+      const ladder = {
+        "The All Jakes": { team: "The All Jakes", played: 0, wins: 0, draws: 0, losses: 0, pf: 0, pa: 0, diff: 0, pts: 0 },
+        "The All Marleys": { team: "The All Marleys", played: 0, wins: 0, draws: 0, losses: 0, pf: 0, pa: 0, diff: 0, pts: 0 }
+      };
+
+      for (let i = 0; i <= upToIndex; i++) {
+        const m = SRL_DATA.matches[i];
+        if (m.status === 'Completed') {
+          const home = ladder[m.homeTeam];
+          const away = ladder[m.awayTeam];
+          if (home && away) {
+            home.played += 1; away.played += 1;
+            home.pf += m.homeScore; home.pa += m.awayScore;
+            away.pf += m.awayScore; away.pa += m.homeScore;
+            if (m.homeScore > m.awayScore) { home.wins += 1; home.pts += 2; away.losses += 1; }
+            else if (m.awayScore > m.homeScore) { away.wins += 1; away.pts += 2; home.losses += 1; }
+            else { home.draws += 1; home.pts += 1; away.draws += 1; away.pts += 1; }
+          }
+        }
+      }
+
+      Object.values(ladder).forEach(t => t.diff = t.pf - t.pa);
+      return Object.values(ladder).sort((a, b) => b.pts - a.pts || b.diff - a.diff);
+    }
+
+    function renderHome() {
+      const completedMatches = SRL_DATA.matches.filter(m => m.status === 'Completed');
+      const latestMatch = completedMatches.length > 0 ? completedMatches[completedMatches.length - 1] : SRL_DATA.matches[0];
+      
+      document.getElementById('home-featured-match').innerHTML = `
+        <div class="text-xs font-semibold text-srl-gold uppercase font-display tracking-wider mb-3 flex items-center justify-between">
+          <span>Latest Result — ${latestMatch.round}</span>
+          <span class="bg-[#050b16] px-2.5 py-0.5 rounded-md text-[10px] text-slate-300 border border-[#1a2842]">${latestMatch.date}</span>
+        </div>
+        <div class="space-y-3">
+          <div class="flex justify-between items-center bg-[#050b16] p-4 rounded-xl border border-[#1a2842]">
+            <span class="font-display font-bold text-white text-lg uppercase tracking-wide">${latestMatch.homeTeam}</span>
+            <span class="font-display text-3xl font-black text-srl-gold">${latestMatch.homeScore}</span>
+          </div>
+          <div class="flex justify-between items-center bg-[#050b16] p-4 rounded-xl border border-[#1a2842]">
+            <span class="font-display font-bold text-white text-lg uppercase tracking-wide">${latestMatch.awayTeam}</span>
+            <span class="font-display text-3xl font-black text-slate-300">${latestMatch.awayScore}</span>
+          </div>
+        </div>
+        <div class="mt-5 pt-3.5 border-t border-[#1a2842] text-center">
+          <button onclick="openMatchReportModal('${latestMatch.id}')" class="text-xs font-display font-bold uppercase tracking-wider text-srl-gold hover:text-amber-400 transition flex items-center justify-center w-full">
+            <span>View Ins & Outs & Match Breakdown</span> <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
+          </button>
+        </div>
+      `;
+
+      const leaderboard = calculatePlayerStats();
+      document.getElementById('home-try-leaders').innerHTML = leaderboard.slice(0, 3).map((p, idx) => `
+        <div class="flex items-center justify-between p-4 rounded-xl bg-[#050b16] border border-[#1a2842] shadow-sm">
+          <div class="flex items-center space-x-3.5">
+            <span class="w-8 h-8 rounded-xl bg-[#02060f] border border-[#1a2842] text-xs font-bold flex items-center justify-center text-srl-gold font-display text-lg">#${p.rank}</span>
+            <div>
+              <div class="text-xs font-semibold text-white flex items-center">${p.name} ${idx === 0 ? '<span class="ml-2.5 px-2.5 py-0.5 rounded-full bg-srl-gold/10 text-srl-gold text-[10px] font-extrabold uppercase font-display tracking-wider border border-srl-gold/30">Top Scorer</span>' : ''}</div>
+              <div class="text-[10px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">${p.team}</div>
+            </div>
+          </div>
+          <span class="font-display text-xl font-black text-srl-gold">${p.totalTries} tries</span>
+        </div>
+      `).join('');
+
+      const latestNews = SRL_DATA.news[0];
+      document.getElementById('home-latest-news').innerHTML = `
+        <div onclick="openArticleModal('${latestNews.id}')" class="bg-[#050b16] p-5 rounded-xl border border-[#1a2842] cursor-pointer hover:border-srl-gold transition space-y-2.5 shadow-sm group">
+          <span class="px-2.5 py-0.5 rounded-md bg-[#0d1729] text-srl-gold font-display text-[10px] font-extrabold uppercase tracking-wider border border-[#1a2842]">${latestNews.category}</span>
+          <h3 class="font-display text-lg font-bold text-white uppercase tracking-wide leading-snug group-hover:text-srl-gold transition">${latestNews.title}</h3>
+          <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed">${latestNews.summary}</p>
+          <div class="text-[10px] text-slate-400 font-semibold pt-1 flex items-center justify-between">
+            <span>By ${latestNews.author} • ${latestNews.date}</span>
+            <span class="text-srl-gold uppercase font-display font-bold">Read Story →</span>
+          </div>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function renderNews(categoryFilter) {
+      document.querySelectorAll('.news-filter-btn').forEach(btn => {
+        const btnText = btn.innerText.trim();
+        const matchesFilter = (categoryFilter === 'ALL' && btnText === 'All News') || 
+                              (categoryFilter !== 'ALL' && btnText.toLowerCase().includes(categoryFilter.toLowerCase()));
+        if (matchesFilter) {
+          btn.className = "news-filter-btn px-4 py-2.5 rounded-xl text-xs font-display uppercase tracking-wider font-bold bg-srl-gold text-slate-950 transition shadow";
+        } else {
+          btn.className = "news-filter-btn px-4 py-2.5 rounded-xl text-xs font-display uppercase tracking-wider font-bold bg-[#050b16] text-slate-300 border border-[#1a2842] transition";
+        }
+      });
+
+      const filtered = categoryFilter === 'ALL' ? SRL_DATA.news : SRL_DATA.news.filter(n => n.category.toLowerCase().includes(categoryFilter.toLowerCase()));
+
+      document.getElementById('news-container').innerHTML = filtered.map(news => `
+        <div class="sport-card rounded-2xl overflow-hidden flex flex-col justify-between sport-card-hover cursor-pointer shadow-xl" onclick="openArticleModal('${news.id}')">
+          <div>
+            <div class="h-48 overflow-hidden relative">
+              <img src="${news.image}" alt="${news.title}" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0d1729] via-transparent to-transparent opacity-80"></div>
+              <span class="absolute top-3.5 left-3.5 px-3 py-1 bg-[#02060f]/90 border border-[#1a2842] text-srl-gold font-display text-xs font-bold uppercase tracking-wider rounded-lg shadow">${news.category}</span>
+            </div>
+            <div class="p-6 space-y-3">
+              <div class="flex justify-between items-center text-[11px] text-slate-400 font-semibold uppercase tracking-wider">
+                <span>${news.date}</span>
+                <span>By ${news.author}</span>
+              </div>
+              <h2 class="font-display text-xl font-bold uppercase text-white tracking-wide leading-snug">${news.title}</h2>
+              <p class="text-xs text-slate-300 line-clamp-3 leading-relaxed">${news.summary}</p>
+            </div>
+          </div>
+          <div class="p-6 pt-0">
+            <span class="text-xs font-display font-bold uppercase tracking-wider text-srl-gold flex items-center">
+              Read Full Story <i data-lucide="arrow-right" class="w-4 h-4 ml-1.5"></i>
+            </span>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function openArticleModal(newsId) {
+      const article = SRL_DATA.news.find(n => n.id === newsId);
+      if (!article) return;
+
+      document.getElementById('article-modal-content').innerHTML = `
+        <div class="space-y-4 border-b border-[#1a2842] pb-5">
+          <div class="flex items-center space-x-3">
+            <span class="px-3 py-1 rounded-lg bg-[#050b16] text-srl-gold font-display text-xs font-bold uppercase tracking-wider border border-[#1a2842]">${article.category}</span>
+            <span class="text-xs text-slate-400">• ${article.date}</span>
+          </div>
+          <h1 class="font-display text-3xl sm:text-4xl font-bold uppercase text-white tracking-wide leading-tight">${article.title}</h1>
+          <p class="text-xs text-srl-gold font-semibold uppercase tracking-wider font-display">Author: ${article.author}</p>
+        </div>
+        <div class="rounded-2xl overflow-hidden border border-[#1a2842] max-h-72">
+          <img src="${article.image}" alt="${article.title}" class="w-full h-full object-cover">
+        </div>
+        <div class="space-y-4 text-sm text-slate-200 leading-relaxed">
+          ${article.content}
+        </div>
+      `;
+      document.getElementById('article-modal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeArticleModal() {
+      document.getElementById('article-modal').classList.add('hidden');
+    }
+
+    function renderMatches() {
+      const upcoming = SRL_DATA.matches.filter(m => m.status !== 'Completed');
+      document.getElementById('matches-container').innerHTML = upcoming.length > 0 ? upcoming.map(m => `
+        <div class="sport-card rounded-2xl p-6 space-y-4 shadow-xl ${m.round === 'Grand Final' ? 'border-srl-gold ring-2 ring-srl-gold/20' : ''}">
+          <div class="flex justify-between items-center text-xs font-display uppercase tracking-wider font-bold text-slate-400">
+            <span class="${m.round === 'Grand Final' ? 'text-srl-gold font-bold text-base' : ''}">${m.round}</span>
+            <span class="px-3.5 py-1 rounded-full bg-[#050b16] border border-[#1a2842] text-srl-gold font-bold">${m.status}</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center text-center">
+            <div class="md:col-span-5 md:text-right font-display text-2xl font-bold uppercase text-white tracking-wide">${m.homeTeam}</div>
+            <div class="md:col-span-2 font-display text-3xl font-black text-srl-gold tracking-widest">VS</div>
+            <div class="md:col-span-5 md:text-left font-display text-2xl font-bold uppercase text-white tracking-wide">${m.awayTeam}</div>
+          </div>
+          <div class="text-xs text-slate-400 text-center pt-3.5 border-t border-[#1a2842] flex justify-between items-center">
+            <span>Date: ${m.date} ${m.kickoff ? '| Kickoff: ' + m.kickoff : ''} ${m.halfTime ? '| Half-time: ' + m.halfTime : ''} ${m.finish ? '| Finish: ' + m.finish : ''}</span>
+            <span class="text-srl-gold font-semibold uppercase font-display tracking-wider">Upcoming Fixture</span>
+          </div>
+        </div>
+      `).join('') : '<div class="sport-card p-6 rounded-2xl text-center text-slate-400">No upcoming fixtures scheduled.</div>';
+    }
+
+    function renderLadder() {
+      const selectEl = document.getElementById('ladder-round-select');
+      const roundIdx = selectEl && selectEl.value !== "" ? parseInt(selectEl.value) : SRL_DATA.matches.length - 1;
+      
+      document.getElementById('ladder-table-body').innerHTML = calculateLadder(roundIdx).map((row, idx) => `
+        <tr class="hover:bg-[#050b16]/60 transition">
+          <td class="py-4 px-4 text-center font-display font-bold text-base text-slate-400">${idx + 1}</td>
+          <td class="py-4 px-4 font-display text-lg font-bold uppercase tracking-wider text-white">${row.team}</td>
+          <td class="py-4 px-3 text-center text-slate-300 font-semibold">${row.played}</td>
+          <td class="py-4 px-3 text-center text-srl-gold font-bold text-base">${row.wins}</td>
+          <td class="py-4 px-3 text-center text-slate-400 font-semibold">${row.draws}</td>
+          <td class="py-4 px-3 text-center text-slate-400 font-semibold">${row.losses}</td>
+          <td class="py-4 px-3 text-center text-slate-300 font-semibold">${row.pf}</td>
+          <td class="py-4 px-3 text-center text-slate-300 font-semibold">${row.pa}</td>
+          <td class="py-4 px-3 text-center font-semibold text-slate-300">${row.diff}</td>
+          <td class="py-4 px-4 text-center font-display font-black text-2xl text-srl-gold">${row.pts}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderTeams() {
+      const selectEl = document.getElementById('teams-round-select');
+      const roundIdx = selectEl && selectEl.value !== "" ? parseInt(selectEl.value) : SRL_DATA.matches.length - 1;
+      const allStats = calculatePlayerStats(roundIdx);
+
+      document.getElementById('teams-container').innerHTML = SRL_DATA.teams.map(team => {
+        const teamPlayers = allStats.filter(p => p.team === team.name);
+        return `
+          <div class="sport-card rounded-2xl p-6 space-y-5 shadow-xl">
+            <div class="border-b border-[#1a2842] pb-4">
+              <span class="inline-block px-3 py-1 rounded-lg text-xs font-bold uppercase font-display tracking-wider ${team.colorTheme} mb-2 border shadow-sm">Team Squad</span>
+              <h2 class="font-display text-3xl font-bold uppercase tracking-wide text-white">${team.name}</h2>
+              <p class="text-xs text-slate-400 mt-1">Location: <strong class="text-white">${team.location}</strong></p>
+              <p class="text-xs text-slate-400 mt-0.5">Captain: <strong class="text-white">${team.captain}</strong></p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              ${teamPlayers.map(p => `
+                <div onclick="openPlayerModal('${p.name}')" class="bg-[#050b16] p-4 rounded-xl border border-[#1a2842] cursor-pointer text-xs font-semibold text-white flex items-center justify-between hover:border-srl-gold transition shadow-sm group">
+                  <span class="group-hover:text-srl-gold transition">${p.name}</span>
+                  <span class="text-srl-gold font-display font-bold text-base">${p.totalTries} tries</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderStats() {
+      const selectEl = document.getElementById('stats-round-select');
+      const roundIdx = selectEl && selectEl.value !== "" ? parseInt(selectEl.value) : SRL_DATA.matches.length - 1;
+      const filter = document.getElementById('stats-team-filter').value;
+      
+      const stats = calculatePlayerStats(roundIdx).filter(p => filter === 'ALL' || p.team === filter);
+      document.getElementById('try-scorers-tbody').innerHTML = stats.map(p => `
+        <tr class="hover:bg-[#050b16]/60 transition">
+          <td class="py-4 px-4 text-center font-display font-bold text-base text-slate-400">#${p.rank}</td>
+          <td class="py-4 px-4 font-semibold text-white text-base">${p.name} ${p.rank === 1 ? '<span class="ml-2 px-2.5 py-0.5 rounded-full bg-srl-gold/10 text-srl-gold text-[10px] font-extrabold uppercase font-display tracking-wider border border-srl-gold/30">Top Scorer</span>' : ''}</td>
+          <td class="py-4 px-4 text-xs text-slate-300 uppercase tracking-wider font-semibold">${p.team}</td>
+          <td class="py-4 px-4 text-center font-display font-black text-2xl text-srl-gold">${p.totalTries}</td>
+          <td class="py-4 px-4 text-right">
+            <button onclick="openPlayerModal('${p.name}')" class="bg-[#050b16] hover:bg-[#1a2842] text-srl-gold text-xs font-display uppercase tracking-wider font-bold px-4 py-2 rounded-xl border border-[#1a2842] transition shadow-sm">View Profile</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderMatchReports() {
+      const completed = SRL_DATA.matches.filter(m => m.status === 'Completed');
+      if (completed.length === 0) {
+        document.getElementById('reports-nav-tabs').innerHTML = '';
+        document.getElementById('match-reports-container').innerHTML = `<div class="sport-card p-6 rounded-2xl text-center text-slate-400">No completed match reports available yet.</div>`;
+        return;
+      }
+
+      document.getElementById('reports-nav-tabs').innerHTML = completed.map(match => `
+        <button onclick="openMatchReportModal('${match.id}')" class="px-5 py-2.5 bg-[#050b16] hover:bg-[#0d1729] border border-[#1a2842] rounded-xl text-xs font-display uppercase tracking-wider font-bold text-srl-gold transition shadow-md">
+          ${match.round} Report & Ins/Outs
+        </button>
+      `).join('');
+
+      document.getElementById('match-reports-container').innerHTML = completed.map(match => {
+        const ins = match.teamChanges && match.teamChanges.ins ? match.teamChanges.ins : ["None"];
+        const outs = match.teamChanges && match.teamChanges.outs ? match.teamChanges.outs : ["None"];
+
+        return `
+          <div class="sport-card rounded-2xl p-6 space-y-6 shadow-2xl">
+            <div class="border-b border-[#1a2842] pb-5 flex flex-wrap justify-between items-center gap-4">
+              <div>
+                <span class="bg-srl-gold text-slate-950 font-display font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">${match.round} Match Summary</span>
+                <h2 class="font-display text-3xl font-bold uppercase tracking-wide text-white mt-2">${match.homeTeam} ${match.homeScore} – ${match.awayScore} ${match.awayTeam}</h2>
+                <p class="text-xs text-slate-400 mt-1">Date: ${match.date} | Referees: ${match.referees ? match.referees.join(', ') : 'TBD'}</p>
+              </div>
+              <button onclick="openMatchReportModal('${match.id}')" class="bg-srl-gold hover:bg-srl-goldHover text-slate-950 font-display font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-xl transition flex items-center shadow-lg">
+                Open Full Report & Ins/Outs <i data-lucide="external-link" class="w-4 h-4 ml-2"></i>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-[#050b16] p-4.5 rounded-xl border border-emerald-500/30">
+                <div class="flex items-center space-x-2 text-emerald-400 font-display uppercase font-bold text-sm tracking-wider mb-2.5">
+                  <i data-lucide="arrow-up-circle" class="w-4 h-4"></i>
+                  <span>Team Ins</span>
+                </div>
+                <ul class="text-xs text-slate-200 list-disc list-inside space-y-1">
+                  ${ins.map(i => `<li>${i}</li>`).join('')}
+                </ul>
+              </div>
+              <div class="bg-[#050b16] p-4.5 rounded-xl border border-rose-500/30">
+                <div class="flex items-center space-x-2 text-rose-400 font-display uppercase font-bold text-sm tracking-wider mb-2.5">
+                  <i data-lucide="arrow-down-circle" class="w-4 h-4"></i>
+                  <span>Team Outs</span>
+                </div>
+                <ul class="text-xs text-slate-200 list-disc list-inside space-y-1">
+                  ${outs.map(o => `<li>${o}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function renderCalendar() {
+      document.getElementById('calendar-container').innerHTML = SRL_DATA.matches.map(m => `
+        <div class="sport-card rounded-2xl p-5 space-y-3 shadow-xl ${m.round === 'Grand Final' ? 'border-srl-gold ring-2 ring-srl-gold/20' : ''}">
+          <div class="flex justify-between items-center text-xs font-display uppercase tracking-wider font-bold text-srl-gold">
+            <span class="${m.round === 'Grand Final' ? 'text-srl-gold font-bold text-base' : ''}">${m.round}</span>
+            <span>${m.date} ${m.kickoff ? '| Kickoff: ' + m.kickoff : ''} ${m.halfTime ? '| Half-time: ' + m.halfTime : ''} ${m.finish ? '| Finish: ' + m.finish : ''}</span>
+          </div>
+          <div class="font-display text-xl font-bold text-white uppercase tracking-wide">${m.homeTeam} vs ${m.awayTeam}</div>
+          <div class="text-xs text-slate-400">Status: <span class="text-white font-medium">${m.status}</span></div>
+        </div>
+      `).join('');
+    }
+
+    function openPlayerModal(playerName) {
+      const selectEl = document.getElementById('stats-round-select');
+      const roundIdx = selectEl && selectEl.value !== "" ? parseInt(selectEl.value) : SRL_DATA.matches.length - 1;
+      const player = calculatePlayerStats(roundIdx).find(p => p.name === playerName);
+      if (!player) return;
+
+      document.getElementById('player-modal-content').innerHTML = `
+        <div class="text-center border-b border-[#1a2842] pb-5">
+          <h2 class="font-display text-3xl font-bold uppercase tracking-wide text-white">${player.name}</h2>
+          <p class="text-xs text-srl-gold font-bold uppercase tracking-wider font-display mt-0.5">${player.team}</p>
+        </div>
+        <div class="grid grid-cols-3 gap-3.5 my-5 text-center">
+          <div class="bg-[#050b16] p-4 rounded-xl border border-[#1a2842]">
+            <div class="font-display text-3xl font-black text-srl-gold">${player.totalTries}</div>
+            <div class="text-[10px] text-slate-400 uppercase tracking-wider font-extrabold mt-1">Total Tries</div>
+          </div>
+          <div class="bg-[#050b16] p-4 rounded-xl border border-[#1a2842]">
+            <div class="font-display text-3xl font-black text-srl-gold">#${player.rank}</div>
+            <div class="text-[10px] text-slate-400 uppercase tracking-wider font-extrabold mt-1">Try Rank</div>
+          </div>
+          <div class="bg-[#050b16] p-4 rounded-xl border border-[#1a2842]">
+            <div class="font-display text-3xl font-black text-sky-400">${player.matchesPlayed}</div>
+            <div class="text-[10px] text-slate-400 uppercase tracking-wider font-extrabold mt-1">Matches</div>
+          </div>
+        </div>
+      `;
+      document.getElementById('player-modal').classList.remove('hidden');
+    }
+
+    function closePlayerModal() {
+      document.getElementById('player-modal').classList.add('hidden');
+    }
+
+    window.onload = function() {
+      renderHome();
+      renderNews('ALL');
+      renderMatches();
+      initRoundSelect('ladder-round-select');
+      initRoundSelect('teams-round-select');
+      initRoundSelect('stats-round-select');
+      renderLadder();
+      renderTeams();
+      renderStats();
+      renderMatchReports();
+      renderCalendar();
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+      lucide.createIcons();
+    };
+  </script>
+</body>
+</html>
